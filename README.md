@@ -47,9 +47,9 @@ This is a singing voice sepration tool developed using recurrent neural network 
 
 ## Dataset
 
-### [MIR-1K Dataset](https://sites.google.com/site/unvoicedsoundseparation/mir-1k)
+### MIR-1K Dataset
 
-Multimedia Information Retrieval, 1000 song clips (MIR-1K), dataset for singing voice separation.
+Multimedia Information Retrieval, 1000 song clips ([MIR-1K]((https://sites.google.com/site/unvoicedsoundseparation/mir-1k))), dataset for singing voice separation.
 
 To download the whole dataset, and split into train, validation, and test set, in the terminal:
 
