@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a singing voice sepration tool developed using recurrent neural network (RNN). It could seperate the singer voice and the background music from the original songs. It is still in the development stage since the separation has not been perfect yet. Please check the demo for the performance.
+This is a singing voice sepration tool developed using recurrent neural network (RNN). It could seperate the singer voice and the background music from the original song. It is still in the development stage since the separation has not been perfect yet. Please check the demo for the performance.
 
 ## Dependencies
 
