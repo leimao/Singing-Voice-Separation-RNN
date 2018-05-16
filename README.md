@@ -115,3 +115,9 @@ The separated sources, ``backstreet_boys-i_want_it_that_way_src1.mp3`` and ``bac
 * Po-Sen Huang, Minje Kim, Mark Hasegawa-Johnson, Paris Smaragdis, Singing-Voice Separation From Monaural Recordings Using Deep Recurrent Neural Networks. 2014.
 * Po-Sen Huang, Minje Kim, Mark Hasegawa-Johnson, Paris Smaragdis, Joint Optimization of Masks and Deep Recurrent Neural Networks for Monaural Source Separation. 2015.
 * Dabi Ahn's Music Source Separation [Repository](https://github.com/andabi/music-source-separation)
+
+
+## To-Do List
+
+- [ ] Evaluation metrics
+- [ ] Hyper parameter tuning
