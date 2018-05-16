@@ -11,22 +11,34 @@ import librosa
 def train():
 
     # Download MIR1K dataset
-    download_dir = 'download/'
-    data_dir = 'data/'
-    mir1k_dir = download_mir1k(download_dir = download_dir, data_dir = data_dir)
-    #wavs_dir = os.path.join(mir1k_dir, 'MIR-1K/UndividedWavfile')
-    wavs_dir = os.path.join(mir1k_dir, 'MIR-1K/Wavfile')
+    download_dir = 'download'
+    data_dir = 'data'
+    mir1k_dir = 'data/MIR1K'
 
-    wav_filenames = list()
-    for file in os.listdir(wavs_dir):
-        if file.endswith('.wav'):
-            wav_filenames.append(os.path.join(wavs_dir, file))
+    train_path = os.path.join(mir1k_dir, 'train.txt')
+    valid_path = os.path.join(mir1k_dir, 'valid.txt')
+    #mir1k_dir = download_mir1k(download_dir = download_dir, data_dir = data_dir)
+    #wavs_dir = os.path.join(mir1k_dir, 'MIR-1K/UndividedWavfile')
+    #wavs_dir = os.path.join(mir1k_dir, 'MIR-1K/Wavfile')
+
+    with open(train_path, 'r') as text_file:
+        content = text_file.readlines()
+    wav_filenames_train = [file.strip() for file in content] 
+
+    with open(valid_path, 'r') as text_file:
+        content = text_file.readlines()
+    wav_filenames_valid = [file.strip() for file in content] 
+
+    #wav_filenames = list()
+    #for file in os.listdir(wavs_dir):
+    #    if file.endswith('.wav'):
+    #        wav_filenames.append(os.path.join(wavs_dir, file))
 
     # Split wav files to training and validaton set
-    wav_filenames_train = wav_filenames[:750]
+    #wav_filenames_train = wav_filenames[:750]
     # Small training set for overfitting purpose
-    wav_filenames_train_small = wav_filenames[:2]
-    wav_filenames_valid = wav_filenames[750:]
+    #wav_filenames_train_small = wav_filenames[:2]
+    #wav_filenames_valid = wav_filenames[750:]
 
     # Preprocess parameters
     mir1k_sr = 16000
@@ -38,7 +50,7 @@ def train():
     num_hidden_units = [256, 256, 256]
     batch_size = 64
     sample_frames = 10
-    iterations = 200000
+    iterations = 50000
     tensorboard_directory = 'graphs/svsrnn'
     clear_tensorboard = False
     model_directory = 'model'

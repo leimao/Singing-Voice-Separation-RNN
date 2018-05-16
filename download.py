@@ -7,6 +7,8 @@ University of Chicago
 '''
 
 import os
+import random
+import numpy as np
 import progressbar
 from urllib.request import urlretrieve
 import rarfile
@@ -96,6 +98,44 @@ def download_mir1k(download_dir = 'download/', data_dir = 'data/'):
     return destination_dir
 
 
+def mir1k_train_test_split(mir1k_dir, train_valid_test_ratio = [0.8, 0.1, 0.1], random_seed = 0):
+
+    assert len(train_valid_test_ratio) == 3
+    assert np.sum(train_valid_test_ratio) == 1
+
+    random.seed(0)
+
+    wavs_dir = os.path.join(mir1k_dir, 'MIR-1K/UndividedWavfile')
+
+    wav_filenames = list()
+    for file in os.listdir(wavs_dir):
+        if file.endswith('.wav'):
+            wav_filenames.append(os.path.join(wavs_dir, file))
+
+    random.shuffle(wav_filenames)
+    num_samples = len(wav_filenames)
+    train_split = int(num_samples * train_valid_test_ratio[0])
+    valid_split = train_split + int(num_samples * train_valid_test_ratio[1])
+
+    train_path = os.path.join(mir1k_dir, 'train.txt')
+    valid_path = os.path.join(mir1k_dir, 'valid.txt')
+    test_path = os.path.join(mir1k_dir, 'test.txt')
+
+    with open(train_path, 'w') as text_file:
+        for i in range(0, train_split):
+            text_file.write(wav_filenames[i] + '\n')
+
+    with open(valid_path, 'w') as text_file:
+        for i in range(train_split, valid_split):
+            text_file.write(wav_filenames[i] + '\n')
+
+    with open(test_path, 'w') as text_file:
+        for i in range(valid_split, num_samples):
+            text_file.write(wav_filenames[i] + '\n')
+
+    return train_path, valid_path, test_path
+
 if __name__ == '__main__':
     
-    download_mir1k()
+    mir1k_dir = download_mir1k()
+    train_path, valid_path, test_path = mir1k_train_test_split(mir1k_dir = mir1k_dir, train_valid_test_ratio = [0.8, 0.1, 0.1], random_seed = 0)

@@ -22,6 +22,16 @@ def load_wavs(filenames, sr):
     return wavs_mono, wavs_src1, wavs_src2
 
 
+def load_mono_wavs(filenames, sr):
+
+    wavs_mono = list()
+    for filename in filenames:
+        wav_mono, _ = librosa.load(filename, sr = sr, mono = True)
+        wavs_mono.append(wav_mono)
+
+    return wavs_mono
+
+
 
 def wavs_to_specs(wavs_mono, wavs_src1, wavs_src2, n_fft = 1024, hop_length = None):
 
