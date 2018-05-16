@@ -67,9 +67,7 @@ $ python evaluate.py
 
 The evaluation took roughly 1 minute on the test set of MIR-1K dataset using NVIDIA GTX TITAN X graphic card. The separated sources, together with the monaural source, would be saved to the ``demo`` directory.
 
-**To do**
-
-The evaluation statistics would be saved.
+*To do: The evaluation statistics would be saved.*
 
 ### Separate Sources for Customized Songs
 
