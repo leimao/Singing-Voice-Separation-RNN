@@ -1,12 +1,20 @@
+'''
+Singer Voice Separator RNN
 
+Lei Mao
+University of Chicago
+'''
 
 import tensorflow as tf 
-#from tensorflow.contrib.rnn import GRUCell, LSTMCell, MultiRNNCell
 import numpy as np 
+import os
+import shutil
+from datetime import datetime
+
 
 class SVSRNN(object):
 
-    def __init__(self, num_features, num_rnn_layer = 3, num_hidden_units = [256, 256, 256]):
+    def __init__(self, num_features, num_rnn_layer = 3, num_hidden_units = [256, 256, 256], tensorboard_directory = 'graphs/svsrnn', clear_tensorboard = True):
 
         assert len(num_hidden_units) == num_rnn_layer
 
@@ -14,6 +22,7 @@ class SVSRNN(object):
         self.num_rnn_layer = num_rnn_layer
         self.num_hidden_units = num_hidden_units
 
+        self.gstep = tf.Variable(0, dtype = tf.int32, trainable = False, name = 'global_step')
         self.learning_rate = tf.placeholder(tf.float32, shape = [], name = 'learning_rate')
         # The shape of x_mixed, y_src1, y_src2 are [batch_size, n_frames (time), n_frequencies]
         self.x_mixed = tf.placeholder(tf.float32, shape = [None, None, num_features], name = 'x_mixed')
@@ -30,6 +39,16 @@ class SVSRNN(object):
         self.saver = tf.train.Saver()
         self.sess = tf.Session()
         self.sess.run(tf.global_variables_initializer())
+
+        # Tensorboard summary
+        if clear_tensorboard:
+            shutil.rmtree(tensorboard_directory, ignore_errors = True)
+            logdir = tensorboard_directory
+        else:
+            now = datetime.now()
+            logdir = os.path.join(tensorboard_directory, now.strftime('%Y%m%d-%H%M%S'))
+        self.writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+        self.summary_op = self.summary()
 
     def network(self):
 
@@ -76,7 +95,7 @@ class SVSRNN(object):
         with tf.variable_scope('loss') as scope:
 
             # Mean Squared Error Loss
-            loss = tf.reduce_mean(tf.square(self.y_src1 - self.y_pred_src1) + tf.square(self.y_src2 - self.y_pred_src2), name = 'MSE_loss')
+            loss = tf.reduce_mean(tf.square(self.y_src1 - self.y_pred_src1) + tf.square(self.y_src2 - self.y_pred_src2), name = 'loss')
 
             '''
             # Generalized KL Divergence Loss
@@ -99,14 +118,19 @@ class SVSRNN(object):
 
     def optimizer_initializer(self):
 
-        optimizer = tf.train.AdamOptimizer(learning_rate = self.learning_rate).minimize(self.loss)
+        optimizer = tf.train.AdamOptimizer(learning_rate = self.learning_rate).minimize(self.loss, global_step = self.gstep)
 
         return optimizer
 
     def train(self, x, y1, y2, learning_rate):
 
-        _, train_loss = self.sess.run([self.optimizer, self.loss], 
+        #step = self.gstep.eval()
+
+        step = self.sess.run(self.gstep)
+
+        _, train_loss, summaries = self.sess.run([self.optimizer, self.loss, self.summary_op], 
             feed_dict = {self.x_mixed: x, self.y_src1: y1, self.y_src2: y2, self.learning_rate: learning_rate})
+        self.writer.add_summary(summaries, global_step = step)
         return train_loss
 
     def validate(self, x, y1, y2):
@@ -133,8 +157,15 @@ class SVSRNN(object):
         self.saver.restore(self.sess, filepath)
 
 
+    def summary(self):
+        '''
+        Create summaries to write on TensorBoard
+        '''
+        with tf.name_scope('summaries'):
+            tf.summary.scalar('loss', self.loss)
+            tf.summary.histogram('x_mixed', self.x_mixed)
+            tf.summary.histogram('y_src1', self.y_src1)
+            tf.summary.histogram('y_src2', self.y_src2)
+            summary_op = tf.summary.merge_all()
 
-
-
-
-
+        return summary_op

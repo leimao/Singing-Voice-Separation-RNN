@@ -5,9 +5,10 @@ Singing_Voice_Separation_RNN
 
 
 
-RarFile 3.0
-
-LibROSA 0.6
+* RarFile 3.0
+* LibROSA 0.6
+* ProgressBar2 3.37.1
+* FFmpeg 4.0
 
 
 ## Caveates

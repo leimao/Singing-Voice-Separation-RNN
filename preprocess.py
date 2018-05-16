@@ -12,7 +12,7 @@ def load_wavs(filenames, sr):
     for filename in filenames:
         wav, _ = librosa.load(filename, sr = sr, mono = False)
         assert (wav.ndim == 2) and (wav.shape[0] == 2), 'Require wav to have two channels'
-        wav_mono = librosa.to_mono(wav)
+        wav_mono = librosa.to_mono(wav) * 2 # Cancelling average
         wav_src1 = wav[0, :]
         wav_src2 = wav[1, :]
         wavs_mono.append(wav_mono)
@@ -39,6 +39,19 @@ def wavs_to_specs(wavs_mono, wavs_src1, wavs_src2, n_fft = 1024, hop_length = No
 
     return stfts_mono, stfts_src1, stfts_src2
 
+def prepare_data_full(stfts_mono, stfts_src1, stfts_src2):
+
+    stfts_mono_full = list()
+    stfts_src1_full = list()
+    stfts_src2_full = list()
+
+    for stft_mono, stft_src1, stft_src2 in zip(stfts_mono, stfts_src1, stfts_src2):
+        stfts_mono_full.append(stft_mono.transpose())
+        stfts_src1_full.append(stft_src1.transpose())
+        stfts_src2_full.append(stft_src2.transpose())
+
+    return stfts_mono_full, stfts_src1_full, stfts_src2_full
+
 
 def sample_data_batch(stfts_mono, stfts_src1, stfts_src2, batch_size = 64, sample_frames = 8):
 
@@ -53,7 +66,6 @@ def sample_data_batch(stfts_mono, stfts_src1, stfts_src2, batch_size = 64, sampl
         stft_src1 = stfts_src1[idx]
         stft_src2 = stfts_src2[idx]
         num_frames = stft_mono.shape[1]
-        #print("AAAA: %d" %num_frames)
         assert  num_frames >= sample_frames
         start = np.random.randint(num_frames - sample_frames + 1)
         end = start + sample_frames
@@ -75,6 +87,48 @@ def sample_data_batch(stfts_mono, stfts_src1, stfts_src2, batch_size = 64, sampl
 def sperate_magnitude_phase(data):
 
     return np.abs(data), np.angle(data)
+
+def combine_magnitdue_phase(magnitudes, phases):
+
+    return magnitudes * np.exp(1.j * phases)
+
+
+def specs_to_wavs_istft_batch(magnitudes, phases, hop_length):
+
+    stft_matrices = combine_magnitdue_phase(magnitudes = magnitudes, phases = phases)
+
+    wavs = list()
+    for magnitude, phase in zip(magnitudes, phases):
+        wav = librosa.istft(stft_matrices, hop_length = hop_length)
+        wavs.append(wav)
+
+    wavs = np.array(wavs)
+
+    return wavs
+
+
+def specs_to_wavs_griffin_lim_batch():
+
+    # Recover an audio signal given only the magnitude of its Short-Time Fourier Transform (STFT)
+
+    return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
