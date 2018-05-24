@@ -1,5 +1,9 @@
 # Singing Voice Separation RNN
 
+Lei Mao
+
+University of Chicago
+
 ## Introduction
 
 This is a singing voice sepration tool developed using recurrent neural network (RNN). It could seperate the singer voice and the background music from the original song. It is still in the development stage since the separation has not been perfect yet. Please check the demo for the performance.
@@ -121,3 +125,4 @@ The separated sources, ``backstreet_boys-i_want_it_that_way_src1.mp3`` and ``bac
 
 - [ ] Evaluation metrics
 - [ ] Hyper parameter tuning
+- [ ] Argparse
