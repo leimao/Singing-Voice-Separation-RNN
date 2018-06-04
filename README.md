@@ -18,33 +18,24 @@ This is a singing voice sepration tool developed using recurrent neural network 
 * LibROSA 0.6
 * [FFmpeg 4.0](https://github.com/librosa/librosa#audioread)
 * Matplotlib 2.1.1
+* [MIR_Eval 0.4](http://craffel.github.io/mir_eval/)
 
 ## Files
 
 ```bash
 .
 ├── demo
-│   ├── backstreet_boys-i_want_it_that_way_mono.wav
-│   ├── backstreet_boys-i_want_it_that_way_src1.wav
-│   └── backstreet_boys-i_want_it_that_way_src2.wav
 ├── download.py
 ├── evaluate.py
 ├── figures
-│   └── training_loss.png
 ├── LICENSE.md
 ├── main.py
 ├── model
-│   ├── checkpoint
-│   ├── svsrnn.ckpt.data-00000-of-00001
-│   ├── svsrnn.ckpt.index
-│   └── svsrnn.ckpt.meta
 ├── model.py
 ├── preprocess.py
 ├── README.md
 ├── songs
-│   └── backstreet_boys-i_want_it_that_way.mp3
 ├── statistics
-│   └── run_20180516-190554-tag-summaries_loss.csv
 ├── train.py
 └── utils.py
 ```
@@ -72,9 +63,12 @@ $ python train.py
 ```
 The training took roughly 45 minutes for 50,000 iterations on the train set of MIR-1K dataset using NVIDIA GTX TITAN X graphic card. 
 
+
+<!---
 <p align="center">
     <img src = "./figures/training_loss.png" width="80%">
 </p>
+--->
 
 The program loads all the MIR-1K dataset into memory and stores all the processed MIR-1K data in the memory to accelerate the data sampling for training. However, this may cosume more than 10 GB of memory.
 
