@@ -84,6 +84,13 @@ $ python evaluate.py
 
 The evaluation took roughly 1 minute on the test set of MIR-1K dataset using NVIDIA GTX TITAN X graphic card. The separated sources, together with the monaural source, would be saved to the ``demo`` directory.
 
+|         | GNSDR           | GSIR  |  GSAR  |
+| -----------|:-------------:| -----:|
+| Benchmark  | 7.45 | 13.08 | 9.68 |
+| Homebrew   | 7.51 | 13.00 | 9.37 |
+
+
+
 *To do: The evaluation statistics would be saved.*
 
 ### Separate Sources for Customized Songs
