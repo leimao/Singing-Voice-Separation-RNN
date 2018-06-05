@@ -8,7 +8,7 @@ def plot_curve(iteration, training_loss, test_loss):
 
     # Plot the a cross validation curve using Matplotlib
 
-    fig = plt.figure(figsize=(5,2))
+    fig = plt.figure(figsize=(10,4))
     plt.rc('font', weight='bold')
     plt.plot(iteration, training_loss, color = 'r', clip_on = False, label = 'Training')
     plt.plot(iteration, test_loss, color = 'b', clip_on = False, label = 'Validation')
