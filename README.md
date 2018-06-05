@@ -117,6 +117,6 @@ The separated sources, ``backstreet_boys-i_want_it_that_way_src1.mp3`` and ``bac
 
 ## To-Do List
 
-- [ ] Evaluation metrics
+- [x] Evaluation metrics
 - [ ] Hyper parameter tuning
 - [ ] Argparse
