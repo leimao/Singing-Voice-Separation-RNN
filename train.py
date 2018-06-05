@@ -7,8 +7,11 @@ from model import SVSRNN
 
 import os
 import librosa
+import numpy as np
 
-def train():
+def train(random_seed = 0):
+
+    np.random.seed(random_seed)
 
     # Download MIR1K dataset
     download_dir = 'download'
@@ -29,17 +32,6 @@ def train():
         content = text_file.readlines()
     wav_filenames_valid = [file.strip() for file in content] 
 
-    #wav_filenames = list()
-    #for file in os.listdir(wavs_dir):
-    #    if file.endswith('.wav'):
-    #        wav_filenames.append(os.path.join(wavs_dir, file))
-
-    # Split wav files to training and validaton set
-    #wav_filenames_train = wav_filenames[:750]
-    # Small training set for overfitting purpose
-    #wav_filenames_train_small = wav_filenames[:2]
-    #wav_filenames_valid = wav_filenames[750:]
-
     # Preprocess parameters
     mir1k_sr = 16000
     n_fft = 1024
@@ -51,20 +43,19 @@ def train():
     batch_size = 64
     sample_frames = 10
     iterations = 50000
-    tensorboard_directory = 'graphs/svsrnn'
+    tensorboard_directory = './graphs/svsrnn'
+    log_directory = './log'
+    train_log_filename = 'train_log.csv'
     clear_tensorboard = False
-    model_directory = 'model'
+    model_directory = './model'
     model_filename = 'svsrnn.ckpt'
+
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
+    open(os.path.join(log_directory, train_log_filename), 'w').close()
 
     # Load train wavs
     wavs_mono_train, wavs_src1_train, wavs_src2_train = load_wavs(filenames = wav_filenames_train, sr = mir1k_sr)
-
-    #wavs_mono_train[0] = wavs_mono_train[0][0:102400]
-    #wavs_mono_train[1] = wavs_mono_train[1][0:102400]
-    #wavs_src1_train[0] = wavs_src1_train[0][0:102400]
-    #wavs_src1_train[1] = wavs_src1_train[1][0:102400]
-    #wavs_src2_train[0] = wavs_src2_train[0][0:102400]
-    #wavs_src2_train[1] = wavs_src2_train[1][0:102400]
 
     # Turn waves to spectrums
     stfts_mono_train, stfts_src1_train, stfts_src2_train = wavs_to_specs(
@@ -104,6 +95,9 @@ def train():
             y1_pred, y2_pred, validation_loss = model.validate(x = x_mixed, y1 = y1, y2 = y2)
             print('Step: %d Validation Loss: %f' %(i, validation_loss))
             print('==============================================')
+
+            with open(os.path.join(log_directory, train_log_filename), 'a') as log_file:
+                log_file.write('{},{},{}\n'.format(i, train_loss, validation_loss))
 
         if i % 1000 == 0:
             model.save(directory = model_directory, filename = model_filename)

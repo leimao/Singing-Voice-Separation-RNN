@@ -64,11 +64,11 @@ $ python train.py
 The training took roughly 45 minutes for 50,000 iterations on the train set of MIR-1K dataset using NVIDIA GTX TITAN X graphic card. 
 
 
-<!---
+
 <p align="center">
-    <img src = "./figures/training_loss.png" width="80%">
+    <img src = "./figures/vs_rnn_validation.png" width="80%">
 </p>
---->
+
 
 The program loads all the MIR-1K dataset into memory and stores all the processed MIR-1K data in the memory to accelerate the data sampling for training. However, this may cosume more than 10 GB of memory.
 
