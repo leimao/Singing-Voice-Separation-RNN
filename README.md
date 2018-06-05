@@ -66,7 +66,7 @@ The training took roughly 45 minutes for 50,000 iterations on the train set of M
 
 
 <p align="center">
-    <img src = "./figures/vs_rnn_validation.png" width="80%">
+    <img src = "./figures/vs_rnn_validation.png" width="90%">
 </p>
 
 
