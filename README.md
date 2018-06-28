@@ -86,8 +86,8 @@ The evaluation took roughly 1 minute on the test set of MIR-1K dataset using NVI
 
 |         | GNSDR           | GSIR  |  GSAR  |
 | -----------|:-------------:| -----:|-----:|
-| Benchmark  | 7.45 | 13.08 | 9.68 |
-| Homebrew   | 7.51 | 13.00 | 9.37 |
+| Vocal  | 7.40 | 12.75 | 9.34 |
+| BGM   | 7.45 | 13.17 | 9.25 |
 
 
 

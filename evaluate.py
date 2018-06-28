@@ -2,6 +2,7 @@
 import librosa
 import os
 import numpy as np
+import tensorflow as tf
 from mir_eval.separation import bss_eval_sources
 
 from preprocess import load_wavs, prepare_data_full, wavs_to_specs, sperate_magnitude_phase, combine_magnitdue_phase
@@ -176,5 +177,6 @@ def evaluate():
 
 if __name__ == '__main__':
 
-    #generate_demo()
+    generate_demo()
+    tf.reset_default_graph()
     evaluate()
